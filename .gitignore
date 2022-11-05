@@ -1,4 +1,6 @@
+.vscode/
 # Mac OS
 *DS_Store
 data/
+models/
 __pycache__/

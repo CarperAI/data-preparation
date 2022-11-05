@@ -113,7 +113,7 @@ def main():
 
     dataset = load_dataset(
         args.dataset_name,
-        args.config_name,
+        # args.config_name,
         data_files=args.data_files,
         split=args.split,
         use_auth_token=True,

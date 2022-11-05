@@ -1,12 +1,16 @@
 boto3
 datasets
+emoji==1.6.3
+fasttext
 openpyxl
 python-dotenv
 py7zr
 rarfile
 zstandard
+sentencepiece
 stanza==1.2.0
 stanza-batch
 nltk
 indic-nlp-library
 underthesea
+https://github.com/kpu/kenlm/archive/master.zip

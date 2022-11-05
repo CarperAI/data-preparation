@@ -9,7 +9,7 @@
 #SBATCH --output=logs/bigscience_dedup/%x-%j.out           # output file name
 #SBATCH --comment=carper
 
-srun --job-name=bigscience_processing --partition=cpu64 --nodes=1 --ntasks-per-node=1 --cpus-per-task=32 --pty --comment carper zsh
+# srun --job-name=bigscience_processing --partition=cpu64 --nodes=1 --ntasks-per-node=1 --cpus-per-task=32 --pty --comment carper zsh
 
 set -x -e
 # setup the environment using the script we created before
@@ -67,13 +67,13 @@ DATASET_NAME="CarperAI/the_pile_v2"
 #     ), True),
 #     "concatenate_lm_fr_ester": (concatenate_lm_fr_ester, False)
 # }
-PREPROCESSINGS="dedup_document filter_remove_empty_docs filter_small_docs filter_wiki_non_text_type"
+PREPROCESSINGS="dedup_document dedup_template_soft filter_remove_empty_docs filter_small_docs filter_wiki_non_text_type"
 
 
 # # ====== RUN PYTHON SCRIPT =======
 
 BASE_PATH=$WORKING_DIR/data/$DATASET_NAME
-SAVE_PATH=$BASE_PATH/final
+SAVE_PATH=$BASE_PATH/dedup_filter.jsonl
 CHECKS_SAVE_PATH=$BASE_PATH/checks
 LOGS_PATH=$BASE_PATH/logs.txt
 
@@ -91,4 +91,40 @@ python clean.py \
     --batch-size 100 \
     --sampling-size-map-checks 1000 \
     --sampling-size-filter-checks 1000 \
+    --save-to-json \
+    2>&1 | tee $LOGS_PATH
+
+
+WORKING_DIR=/fsx/home-$(whoami)/work/data-preparation/preprocessing/training/01b_oscar_cleaning_and_filtering
+pushd $WORKING_DIR
+
+# dataset_name
+# config_name
+# data_files
+# split
+# lang_dataset_id
+# path_fasttext_model
+# path_sentencepiece_model="ac_dc/af.sp.model"
+# path_kenlm_model="ac_dc/af.arpa.bin",
+# num_proc
+# path_dir_save_dataset
+
+NEW_SAVE_PATH=$BASE_PATH/oscar_filtering
+MODEL_PATHS=$WORKING_DIR/models
+
+mkdir -p $(dirname $NEW_SAVE_PATH)
+mkdir -p $MODEL_PATHS
+
+curl https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -o $MODEL_PATHS/lid.176.bin
+python download_sentencepiece_kenlm_models.py \
+    --output_dir_path $MODEL_PATHS
+
+python main_filtering.py \
+    --dataset_name "json" \
+    --data_files $SAVE_PATH \
+    --lang_dataset_id "en" \
+    --path_fasttext_model $MODEL_PATHS/lid.176.bin \
+    --path_sentencepiece_model $MODEL_PATHS/en.sp.model \
+    --path_kenlm_model $MODEL_PATHS/en.arpa.bin \
+    --path_dir_save_dataset $NEW_SAVE_PATH \
     2>&1 | tee $LOGS_PATH
