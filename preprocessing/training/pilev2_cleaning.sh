@@ -128,3 +128,23 @@ python main_filtering.py \
     --path_kenlm_model $MODEL_PATHS/en.arpa.bin \
     --path_dir_save_dataset $NEW_SAVE_PATH \
     2>&1 | tee $LOGS_PATH
+
+
+WORKING_DIR=/fsx/home-$(whoami)/work/data-preparation/preprocessing/training
+pushd $WORKING_DIR
+
+DATASET_NAME=$SAVE_PATH # $NEW_SAVE_PATH/en/dataset.jsonl
+CHECKS_SAVE_PATH=$BASE_PATH/checks_pii
+NEW_SAVE_PATH=$BASE_PATH/dedup_pii_removal.jsonl
+python 02_pii/pii_processor.py \
+    --save-to-json \
+    --save-check-to-json \
+    --dataset-path "" \
+    --dataset-name $DATASET_NAME \
+    --save-path $NEW_SAVE_PATH \
+    --save-check-path $CHECKS_SAVE_PATH \
+    --num-proc 40 \
+    --batch-size 1000 \
+    --save-batch-size 10000 \
+    --check-sampling-size 10000 \
+    --check-only-modified

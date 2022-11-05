@@ -14,3 +14,7 @@ nltk
 indic-nlp-library
 underthesea
 https://github.com/kpu/kenlm/archive/master.zip
+regex
+validators
+tqdm
+pandas

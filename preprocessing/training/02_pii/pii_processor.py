@@ -54,11 +54,11 @@ if __name__ == '__main__':
     args = get_args()
     logger.info(f"** The job is runned with the following arguments: **\n{args}\n **** ")
 
-    logger.info(f" ===== Loading {args.dataset_path} =====")
+    logger.info(f" ===== Loading {args.dataset_name} =====")
     if args.load_from_disk:
         ds = load_from_disk(str(args.dataset_path))
     else:
-        ds = load_dataset(str(args.dataset_path), data_files=[f"*{args.dataset_name}"], split="train")
+        ds = load_dataset("json", data_files=[args.dataset_name], split="train")
     
     lang = str(args.dataset_path).split("/")[-1].replace("indic-", "").replace("lm_", "")[:2]
     logger.info(f"ds info: {ds}")
