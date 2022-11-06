@@ -18,7 +18,7 @@ def get_args():
     parser.add_argument('--save-to-json', action="store_true")
     parser.add_argument('--save-check-to-json', action="store_true")
     parser.add_argument('--check-only-modified', action="store_true")
-    parser.add_argument('--dataset-path', type=Path)
+    parser.add_argument('--dataset-path', type=str)
     parser.add_argument('--dataset-name', type=str)
     parser.add_argument('--save-path', type=Path)
     parser.add_argument('--save-check-path', type=Path)
@@ -58,9 +58,9 @@ if __name__ == '__main__':
     if args.load_from_disk:
         ds = load_from_disk(str(args.dataset_path))
     else:
-        ds = load_dataset("json", data_files=[args.dataset_name], split="train")
+        ds = load_dataset(args.dataset_path, data_files=[args.dataset_name], split="train")
     
-    lang = str(args.dataset_path).split("/")[-1].replace("indic-", "").replace("lm_", "")[:2]
+    lang = "en" # str(args.dataset_path).split("/")[-1].replace("indic-", "").replace("lm_", "")[:2]
     logger.info(f"ds info: {ds}")
     logger.info(f" ===== Applying PII =====")
     ds = ds.map(

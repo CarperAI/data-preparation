@@ -122,6 +122,7 @@ def filter_diff_text(examples, in_text_col, out_text_col):
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset-path", type=str, required=True, help="Dataset path we load the dataset from.")
+    parser.add_argument("--dataset_config", type=str, required=True, help="Dataset config we load the dataset from.")
     parser.add_argument("--preprocessings", nargs="*", type=str, required=True,
                         choices=(MAPS_KEYS | FILTERS_KEYS | DEDUPS_KEYS),
                         help="List of dataset modification we apply in sequence.")
@@ -280,7 +281,7 @@ def main():
     if args.load_arrow_file:
         ds = load_from_disk(args.dataset_path)
     else:
-        ds = load_dataset(args.dataset_path, split="train", use_auth_token=True, ignore_verifications=True)
+        ds = load_dataset(args.dataset_path, args.dataset_config, split="train", use_auth_token=True, ignore_verifications=True).select(range(1_000))
 
     # Apply series of maps and filters
     logger.info(f" ===== Applying transformations =====")

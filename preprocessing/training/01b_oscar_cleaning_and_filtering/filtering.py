@@ -954,9 +954,8 @@ class DatasetFiltering:
             self.path_dir_save_dataset, self.lang_dataset_id
         )
         pathlib.Path(path_dir_save_dataset).mkdir(parents=True, exist_ok=True)
-        print(self.ds)
         self.ds.to_json(
-            path_dir_save_dataset/"dataset.jsonl",
+            path_dir_save_dataset/"dataset.json",
             # num_proc=-1
         )
         # self.ds.save_to_disk(path_dir_save_dataset)

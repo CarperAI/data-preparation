@@ -113,7 +113,6 @@ def main():
 
     dataset = load_dataset(
         args.dataset_name,
-        # args.config_name,
         data_files=args.data_files,
         split=args.split,
         use_auth_token=True,
@@ -131,7 +130,7 @@ def main():
     dataset_filtering.modifying_documents()
     dataset_filtering.filtering()
     dataset_filtering.save_dataset()
-
+    print(dataset_filtering.ds)
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,9 @@
+loaded module
+running cleaning script
+~/work/data-preparation/preprocessing/training/01a_catalogue_cleaning_and_filtering ~/work/data-preparation/preprocessing/training
+finished cleaning script
+running filtering script
+~/work/data-preparation/preprocessing/training/01b_oscar_cleaning_and_filtering ~/work/data-preparation/preprocessing/training/01a_catalogue_cleaning_and_filtering ~/work/data-preparation/preprocessing/training
+finished filtering script
+running pii removal script
+~/work/data-preparation/preprocessing/training ~/work/data-preparation/preprocessing/training/01b_oscar_cleaning_and_filtering ~/work/data-preparation/preprocessing/training/01a_catalogue_cleaning_and_filtering ~/work/data-preparation/preprocessing/training
